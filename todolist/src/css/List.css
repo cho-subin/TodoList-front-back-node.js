@@ -1,0 +1,25 @@
+.list-table {
+    border-spacing: 0px;
+    border-collapse: collapse;
+    width: 100%;
+    margin: 20px 0;
+}
+
+th,
+td {
+    border: 1px solid #ddd;
+    padding: 10px 20px;
+    font-size: 20px;
+}
+
+th {
+    background: #9fd6c2;
+}
+
+td {
+    color: #fff;
+}
+
+tbody td:first-child {
+    text-align: center;
+}

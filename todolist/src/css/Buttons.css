@@ -1,0 +1,10 @@
+.btn-area {
+    text-align: center;
+}
+
+.btn-area button {
+    height: 35px;
+    padding: 0 10px;
+    border: none;
+    margin-left: 6px;
+}

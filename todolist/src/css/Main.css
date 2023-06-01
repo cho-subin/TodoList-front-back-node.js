@@ -1,0 +1,30 @@
+html,body,input {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Gamja Flower', sans-serif;
+}
+
+button {
+    font-family: 'Gamja Flower', cursive;
+    background: #a369af;
+    color: #fff;
+    font-size: 18px;
+    cursor: pointer;
+}
+
+.main {
+    width: 500px;
+    margin: 100px auto;
+    border: 1px solid #eee;
+    padding: 20px 30px 50px;
+    background: #333;
+}
+
+.main h1 {
+    padding-bottom: 10px;
+    text-align: center;
+    color: #9fd6c2;
+    border-bottom: 1px solid #87898f;
+}
+
