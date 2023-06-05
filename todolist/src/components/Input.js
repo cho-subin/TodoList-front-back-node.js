@@ -1,23 +1,43 @@
 import React, { useState } from 'react';
+import axios from 'axios';
 import '../css/Input.css';
 
 const Input = () => {
 
-    const [todoText,setTodoText] = useState('');
+    const [sendList, setSendList] = useState();
 
-    console.log('todoText', todoText);
+    console.log('sendList', sendList);
 
     let text = (e) => {
-        setTodoText(e);
+        setSendList({
+            content : e,
+            check : false
+        });
     }
 
     // 여기에 axios 통신 - post
-    const addBtn = () => {
+    const addBtn = async () => {
+        if (sendList.content !== ''){
+            const res = await axios.post('/api/lists/post', sendList)
+            .then((res)=>{
+                console.log(res)
+            })
+            .catch((err)=>{
+                console.log(err)
+            })
+            console.log('res',res);
+            alert('to do list에 추가되었습니다.')
+        }
+        else if (sendList.content === ''){
+            alert('to do list를 작성해주세요.');
+            return;
+        }
 
-        alert('to do list에 추가되었습니다.')
+        setSendList({
+            content: '',
+            check: false
+        })
     }
-
-
 
     return (
         <div className="write-box">
@@ -27,4 +47,4 @@ const Input = () => {
     )
 }
 
-export default Input
+export default Input;

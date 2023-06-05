@@ -1,15 +1,48 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
+import axios from 'axios';
 import '../css/List.css';
 
 const List = () => {
 
-    const [list, setList] = useState([
-        { text : 'HTML + CSS 공부하기', check : true },
-        { text: 'JavaScript 공부하기', check: false },
-        { text: '헬스 하기', check: true },
-    ]);
+    const [lists, setLists] = useState();
 
-    const [isCheck, setIsCheck] = useState();
+    useEffect(() => {
+        getList();
+    }, [])
+
+    // 작성한 todo list 불러오기
+    const getList = async() => {
+        await axios.get('/api/lists/get')
+        .then((res) => {
+            console.log(res)
+            setLists(res.data)
+        })
+        .catch((err)=>{
+            console.log(err)
+        })
+    }
+    
+    // check 상태변경 mongoDB
+    // const patchCheck = async() => {
+    //     await axios.patch(`/api/lists/patch/${}`)
+    // }
+
+    // check F/T lists에 업데이트 하기
+    const checkTF = async (idx) => {
+        
+        // let copyLists = [...lists];
+
+        // if (copyLists[idx].check === true){
+        //     copyLists[idx].check = false;
+        // }
+        // else if (copyLists[idx].check === false){
+        //     copyLists[idx].check = true;
+        // }
+        
+        await axios.patch(`/api/lists/patch/${lists[idx]?._id}`,) 
+    };
+
+    console.log('lists', lists);
 
     return (
         <table className="list-table">
@@ -28,13 +61,13 @@ const List = () => {
                 </tr>
             </thead>
             <tbody id="listBody">
-                {list.map((item,idx)=>{
+                {lists?.map((item,idx)=>{
                     return(
                         <tr key={idx}>
                             <td>
-                                <input type="checkbox" className="btn-chk" defaultChecked={item.check} />
+                                <input type="checkbox" className="btn-chk" defaultChecked={item?.check} onChange={() => { checkTF(idx)}}/>
                             </td>
-                            <td>{item.text}</td>
+                            <td>{item?.content}</td>
                         </tr>
                     )
                 })}
