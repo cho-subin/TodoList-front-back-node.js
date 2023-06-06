@@ -1,14 +1,14 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useCallback } from 'react';
 import axios from 'axios';
 import '../css/List.css';
 
-const List = () => {
+const List = ({ onListUpdated }) => {
 
     const [lists, setLists] = useState();
-
-    useEffect(() => {
-        getList();
-    }, [])
+    
+    const [isCheck, setIsCheck] = useState(null);
+    const [isClick, setIsClick] = useState('n');
+    const [idx, setIdx] = useState(null);
 
     // 작성한 todo list 불러오기
     const getList = async() => {
@@ -21,28 +21,52 @@ const List = () => {
             console.log(err)
         })
     }
-    
-    // check 상태변경 mongoDB
-    // const patchCheck = async() => {
-    //     await axios.patch(`/api/lists/patch/${}`)
-    // }
 
     // check F/T lists에 업데이트 하기
     const checkTF = async (idx) => {
-        
-        // let copyLists = [...lists];
+        console.log(idx)
 
-        // if (copyLists[idx].check === true){
-        //     copyLists[idx].check = false;
-        // }
-        // else if (copyLists[idx].check === false){
-        //     copyLists[idx].check = true;
-        // }
-        
-        await axios.patch(`/api/lists/patch/${lists[idx]?._id}`,) 
+        if (lists[idx]?.check === true){
+            setIsCheck(false);
+            setIdx(idx);
+            setIsClick('y');
+        }
+        else if (lists[idx]?.check === false){
+            setIsCheck(true);
+            setIdx(idx);
+            setIsClick('y');
+        }
     };
 
-    console.log('lists', lists);
+    // check 상태변경 mongoDB
+    const patchCheck = useCallback(async () => {
+        if (isClick === 'y' && idx >= 0 && idx < lists?.length) {
+            const listId = lists[idx]?._id;
+            let check = { check: isCheck }
+
+            await axios.patch(`/api/lists/patch/${listId}`, check)
+                .then((res) => {
+                    console.log(res)
+                })
+                .catch((err) => {
+                    console.log(err)
+                })
+        }
+    }, [lists, idx, isCheck, isClick]);
+
+    useEffect(() => {
+        getList();
+    }, [onListUpdated]);
+
+    useEffect(() => {
+        if ((isCheck !== null && idx !== null) || (isCheck !== undefined && idx !== undefined)){
+            patchCheck();
+        }
+    }, [idx, isCheck, patchCheck])
+
+    // console.log('lists', lists);
+    // console.log('isCheck', isCheck);
+    // console.log('idx', idx);
 
     return (
         <table className="list-table">
@@ -61,11 +85,11 @@ const List = () => {
                 </tr>
             </thead>
             <tbody id="listBody">
-                {lists?.map((item,idx)=>{
-                    return(
+                {lists?.map((item, idx) => {
+                    return (
                         <tr key={idx}>
                             <td>
-                                <input type="checkbox" className="btn-chk" defaultChecked={item?.check} onChange={() => { checkTF(idx)}}/>
+                                <input type="checkbox" className="btn-chk" defaultChecked={item?.check} onChange={() => { checkTF(idx); }} />
                             </td>
                             <td>{item?.content}</td>
                         </tr>
