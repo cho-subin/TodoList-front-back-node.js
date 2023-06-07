@@ -1,3 +1,4 @@
+import axios from 'axios';
 import React, { useEffect, useState } from 'react'
 import Buttons from '../components/Buttons';
 import Input from '../components/Input';
@@ -7,6 +8,7 @@ import '../css/Main.css';
 const Main = () => {
 
     const [isListUpdated, setListUpdated] = useState(false);
+    const [lists, setLists] = useState();
 
     const handleListUpdated = () => {
         setListUpdated(true);
@@ -19,13 +21,29 @@ const Main = () => {
             setListUpdated(false); // 업데이트 후 상태 초기화
         }
     }, [isListUpdated]);
+
+    // 작성한 todo list 불러오기
+    const getListMain = async () => {
+        await axios.get('/api/lists/getMain')
+            .then((res) => {
+                console.log(res)
+                setLists(res.data)
+            })
+            .catch((err) => {
+                console.log(err)
+            })
+    }
+
+    useEffect(() => {
+        getListMain();
+    }, [isListUpdated]);
     
     return (
         <div className='main'>
             <h1>To Do List</h1>
             <Input onListUpdated={handleListUpdated} />
-            <List onListUpdated={handleListUpdated} />
-            <Buttons />
+            <List lists={lists} />
+            <Buttons onListUpdated={handleListUpdated} lists={lists}/>
         </div>
     )
 }

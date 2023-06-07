@@ -2,25 +2,13 @@ import React, { useEffect, useState, useCallback } from 'react';
 import axios from 'axios';
 import '../css/List.css';
 
-const List = ({ onListUpdated }) => {
+const List = ({ lists }) => {
 
-    const [lists, setLists] = useState();
+    // const [lists, setLists] = useState();
     
     const [isCheck, setIsCheck] = useState(null);
     const [isClick, setIsClick] = useState('n');
     const [idx, setIdx] = useState(null);
-
-    // 작성한 todo list 불러오기
-    const getList = async() => {
-        await axios.get('/api/lists/get')
-        .then((res) => {
-            console.log(res)
-            setLists(res.data)
-        })
-        .catch((err)=>{
-            console.log(err)
-        })
-    }
 
     // check F/T lists에 업데이트 하기
     const checkTF = async (idx) => {
@@ -53,10 +41,6 @@ const List = ({ onListUpdated }) => {
                 })
         }
     }, [lists, idx, isCheck, isClick]);
-
-    useEffect(() => {
-        getList();
-    }, [onListUpdated]);
 
     useEffect(() => {
         if ((isCheck !== null && idx !== null) || (isCheck !== undefined && idx !== undefined)){
