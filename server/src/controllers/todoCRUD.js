@@ -36,16 +36,19 @@ const patchList = async (req, res, next) => {
     const id = req.params.id
     const { content, check } = req.body
 
+    console.log('check', check);
+    console.log('content', content);
+
     try {
         const list = {};
         // name 및 age 필드를 검사하여 업데이트할 필드를 동적으로 설정해 불필요한 업데이트를 방지
-        if (content) {
+        if (content !== undefined) {
             list.content = content;
         }
-        if (check) {
+        if (check !== undefined) {
             list.check = check;
         }
-        console.log('list', list);
+        console.log('list1', list);
 
         const updateList = await ListModel.findOneAndUpdate(
             { _id: id },
@@ -65,6 +68,39 @@ const patchList = async (req, res, next) => {
     res.json({ message: 'list 정보 업데이트 성공' });
 }
 
+const deleteList = async (req, res, next) => {
+    const id = req.params.id
+
+    console.log('id',id)
+    
+    let list;
+    if(id){
+        try{
+            list = await ListModel.findById(id).exec();
+            await list.deleteOne();
+        }
+        catch{
+            console.log(err);
+            return next(err); // 오류가 생겼을때 코드 실행 중단.
+        }
+
+        res.json({message : '마지막 항목이 삭제되었습니다.'})
+    }
+
+    else if(id==undefined){
+        try {
+            await ListModel.deleteMany({});
+        }
+        catch {
+            console.log(err);
+            return next(err); // 오류가 생겼을때 코드 실행 중단.
+        }
+
+        res.json({ message: '모든 항목이 삭제되었습니다.' })
+    }
+}
+
 exports.createList = createList;
 exports.getList = getList;
 exports.patchList = patchList;
+exports.deleteList = deleteList;

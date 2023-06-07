@@ -6,6 +6,9 @@ const router = express.Router();
 
 router.post('/post', todoCRUD.createList);
 router.get('/get', todoCRUD.getList);
+router.get('/getMain', todoCRUD.getList);
 router.patch('/patch/:id', todoCRUD.patchList);
+router.delete('/delete/:id', todoCRUD.deleteList);
+router.delete('/delete', todoCRUD.deleteList);
 
 module.exports = router;
