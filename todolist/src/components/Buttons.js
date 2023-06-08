@@ -1,5 +1,5 @@
 import axios from 'axios';
-import React, { useCallback, useEffect } from 'react';
+import React from 'react';
 import '../css/Buttons.css';
 
 const Buttons = ({ onListUpdated, lists }) => {
@@ -35,8 +35,8 @@ const Buttons = ({ onListUpdated, lists }) => {
 
     return (
         <div className="btn-area">
-            <button type="button" id="btnDelLast" onClick={() => deleteLast()}>마지막 항목 삭제</button>
-            <button type="button" id="btnDelAll" onClick={() => deleteAll()}>전체 삭제</button>
+            <button type="button" id="btnDelLast" onClick={deleteLast}>마지막 항목 삭제</button>
+            <button type="button" id="btnDelAll" onClick={deleteAll}>전체 삭제</button>
         </div>
     )
 }

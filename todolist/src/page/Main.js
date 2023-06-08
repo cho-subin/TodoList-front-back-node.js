@@ -18,7 +18,6 @@ const Main = () => {
         if (isListUpdated) {
             // 리스트가 업데이트되었으므로 필요한 작업 수행
             // 예: 다시 데이터를 가져온다.
-            setListUpdated(false); // 업데이트 후 상태 초기화
         }
     }, [isListUpdated]);
 
@@ -35,15 +34,15 @@ const Main = () => {
     }
 
     useEffect(() => {
-        getListMain();
+            getListMain();
     }, [isListUpdated]);
     
     return (
         <div className='main'>
             <h1>To Do List</h1>
-            <Input onListUpdated={handleListUpdated} />
+            <Input onListUpdated={getListMain} />
             <List lists={lists} />
-            <Buttons onListUpdated={handleListUpdated} lists={lists}/>
+            <Buttons lists={lists} onListUpdated={handleListUpdated }/>
         </div>
     )
 }
