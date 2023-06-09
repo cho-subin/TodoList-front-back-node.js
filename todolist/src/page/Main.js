@@ -11,7 +11,7 @@ const Main = () => {
     const [lists, setLists] = useState();
 
     const handleListUpdated = () => {
-        setListUpdated(true);
+        setListUpdated(!isListUpdated);
     }
 
     useEffect(() => {
